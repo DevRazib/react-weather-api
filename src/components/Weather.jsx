@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 const API_KEY =import.meta.env.VITE_SOME_KEY;
+
 const Weather = () => {
   const [city, setCity] = useState('');
   const [weatherData, setWeatherData] = useState(null);
@@ -12,7 +13,6 @@ const Weather = () => {
         `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${API_KEY}`
       );
       setWeatherData(response.data);
-      console.log(response.data); //You can see all the weather data in console log
     } catch (error) {
       console.error(error);
     }
@@ -20,7 +20,7 @@ const Weather = () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [city]);
 
   const handleInputChange = (e) => {
     setCity(e.target.value);
@@ -34,16 +34,17 @@ const Weather = () => {
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <input
+        <input className='myInput'
           type="text"
           placeholder="Enter city name"
           value={city}
           onChange={handleInputChange}
         />
-        <button type="submit">Get Weather</button>
+        <button className='myBtn' type="submit">Get Weather</button>
       </form>
       {weatherData ? (
         <>
+          <div style={{color:'white'}}>
           <h2>{weatherData.name}</h2>
           <p>Temperature: {weatherData.main.temp}°C</p>
           <p>Description: {weatherData.weather[0].description}</p>
@@ -51,9 +52,10 @@ const Weather = () => {
           <p>Humidity : {weatherData.main.humidity}%</p>
           <p>Pressure : {weatherData.main.pressure}</p>
           <p>Wind Speed : {weatherData.wind.speed}m/s</p>
+          </div>
         </>
       ) : (
-        <p>Loading weather data...</p>
+        <p style={{color:'white'}}>Loading weather data...</p>
       )}
     </div>
   );
